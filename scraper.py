@@ -19,6 +19,7 @@ import pandas as pd
 import json
 import datetime
 import time
+from dateutil import parser
 
 br = mechanize.Browser()
 url='https://acp.planninginspectorate.gov.uk/CaseSearch.aspx'
@@ -62,6 +63,14 @@ if len(updateRecords)>0:
 	print('Updating {} records'.format(len(updateRecords)))
 	scraperwiki.sqlite.save(unique_keys=['CaseReference'],table_name=t, data=updateRecords)
 
+def dateSetter(ds):
+	if ds=='' or ds=='N/A': return ''
+	try:
+		dst=parser.parse(dd, dayfirst=True)
+	except:
+		dst=''
+	return dst
+	
 def appealScrape(caseRef):
     print('Getting details for {}'.format(caseRef))
     urlstub="https://acp.planninginspectorate.gov.uk/ViewCase.aspx?CaseID={}&CoID=0"
@@ -78,6 +87,14 @@ def appealScrape(caseRef):
       cells=row.findAll('td')
       d[cells[0].text.strip()]=cells[1].text.strip()
       if len(cells)==4: d[cells[2].text.strip()]=cells[3].text.strip()
+    
+    #parse dates: "Statement(s) due","Questionnaire due","Event Date","Start Date","Appellant/LPA Final Comments due","Inquiry Evidence due","Decision Date","Interested Party Comments due"
+    df['Start_Date_t']=df['Start Date'].apply(lambda x: dateSetter(x))
+    df['Start_Date_t']= df['Start_Date_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
+
+    df['Int_Party_Comments_due_t']=df['Interested Party Comments due'].apply(lambda x: dateSetter(x))
+    df['Int_Party_Comments_due_t']= df['Int_Party_Comments_due_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
+
     d['linked']=rows[-1].find('td').text
     d['ref']=soup.find('h1',id='cphMainContent_LabelCaseReference').text.replace('Reference:','').strip()
     
