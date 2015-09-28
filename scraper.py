@@ -18,7 +18,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import json
 import datetime
-from dateutil import parser
 
 br = mechanize.Browser()
 url='https://acp.planninginspectorate.gov.uk/CaseSearch.aspx'
@@ -100,6 +99,7 @@ def appealScrape(caseRef):
 
 
 zz=df['Case Reference'].head(2).apply(lambda x: appealScrape(x))
+#zz=df[df['Case Reference'].isin(grabber)].apply(lambda x: appealScrape(x))
 caseDetails=[list(z) for z in zip(*zz)]
 
 cc=[]
