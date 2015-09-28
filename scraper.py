@@ -72,7 +72,7 @@ if len(updateRecords)>0:
 def dateSetter(ds):
 	if ds=='' or ds=='N/A': return ''
 	try:
-		dst=parser.parse(dd, dayfirst=True)
+		dst=parser.parse(ds, dayfirst=True)
 		dst=datetime.date(dst.year,dst.month,dst.day)
 	except:
 		dst=''
