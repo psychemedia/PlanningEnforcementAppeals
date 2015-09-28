@@ -80,23 +80,33 @@ def appealScrape(caseRef):
       if len(cells)==4: d[cells[2].text.strip()]=cells[3].text.strip()
     d['linked']=rows[-1].find('td').text
     d['ref']=soup.find('h1',id='cphMainContent_LabelCaseReference').text.replace('Reference:','').strip()
-    d['appellant']=soup.find('span',id='cphMainContent_labName')['title']
-    d['agent']=soup.find('span',id='cphMainContent_labAgentName')['title']
-    d['address']=soup.find('span',id='cphMainContent_labSiteAddress')['title']
+    
+    tmp=soup.find('span',id='cphMainContent_labName')
+    tmp=tmp['title'] if 'title' in tmp else ''
+    d['appellant']=tmp
+    
+    tmp=soup.find('span',id='cphMainContent_labAgentName')
+    tmp=tmp['title'] if 'title' in tmp else ''
+    d['agent']=tmp
+    
+    tmp=soup.find('span',id='cphMainContent_labSiteAddress')
+    tmp=tmp['title'] if 'title' in tmp else ''
+    d['address']=tmp
     
     l=[]
-    for lnk in d['linked'].split('\n'):
-        ll={'caseRef':d['ref']}
-        if lnk.startswith('Lead Case'):
-            ll['k']=d['ref']+':'+lnk.split('-')[1].strip()
-            ll['type']='Lead'
-            ll["linkref"]=lnk.split('-')[1].strip()
-            l.append(ll)
-        elif lnk.startswith('Linked Case'):
-            ll['k']=d['ref']+':'+lnk.split('-')[1].strip()
-            ll['type']='Linked'
-            ll["linkref"]=lnk.split('-')[1].strip()
-            l.append(ll)
+    if 'linked' in d:
+        for lnk in d['linked'].split('\n'):
+            ll={'caseRef':d['ref']}
+            if lnk.startswith('Lead Case'):
+                ll['k']=d['ref']+':'+lnk.split('-')[1].strip()
+                ll['type']='Lead'
+                ll["linkref"]=lnk.split('-')[1].strip()
+                l.append(ll)
+            elif lnk.startswith('Linked Case'):
+                ll['k']=d['ref']+':'+lnk.split('-')[1].strip()
+                ll['type']='Linked'
+                ll["linkref"]=lnk.split('-')[1].strip()
+                l.append(ll)
     time.sleep(1)
     return d,l
 
