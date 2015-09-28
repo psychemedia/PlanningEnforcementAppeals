@@ -35,7 +35,7 @@ doc=req.read()
 doc=doc.replace('\r','').replace('\n','')
 doc=doc.replace('<br/>',', ')
 
-df=pd.read_html(doc,header=0)[0].head(5)
+df=pd.read_html(doc,header=0)[0]
 df.rename(columns={'Appellant/Applicant':'AppellantApplicant','Case Reference':'CaseReference','Site Address':'SiteAddress','Case Type':'CaseType'}, inplace=True)
 
 t='IWPLANNINGAPPLICATIONAPPEALS'
