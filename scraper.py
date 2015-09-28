@@ -89,11 +89,11 @@ def appealScrape(caseRef):
       if len(cells)==4: d[cells[2].text.strip()]=cells[3].text.strip()
     
     #parse dates: "Statement(s) due","Questionnaire due","Event Date","Start Date","Appellant/LPA Final Comments due","Inquiry Evidence due","Decision Date","Interested Party Comments due"
-    df['Start_Date_t']=df['Start Date'].apply(lambda x: dateSetter(x))
-    df['Start_Date_t']= df['Start_Date_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
+    d['Start_Date_t']=d['Start Date'].apply(lambda x: dateSetter(x))
+    d['Start_Date_t']= d['Start_Date_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
 
-    df['Int_Party_Comments_due_t']=df['Interested Party Comments due'].apply(lambda x: dateSetter(x))
-    df['Int_Party_Comments_due_t']= df['Int_Party_Comments_due_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
+    d['Int_Party_Comments_due_t']=d['Interested Party Comments due'].apply(lambda x: dateSetter(x))
+    d['Int_Party_Comments_due_t']= d['Int_Party_Comments_due_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
 
     d['linked']=rows[-1].find('td').text
     d['ref']=soup.find('h1',id='cphMainContent_LabelCaseReference').text.replace('Reference:','').strip()
