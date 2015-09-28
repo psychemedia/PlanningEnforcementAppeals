@@ -41,7 +41,7 @@ t='IWPLANNINGAPPLICATIONAPPEALS'
 dt="CREATE TABLE IF NOT EXISTS 'IWPLANNINGAPPLICATIONAPPEALS' ('CaseReference' text,'SiteAddress' text,'AppellantApplicant' text,'Authority' text,'Case Type' text,'Status' text)"
 scraperwiki.sqlite.execute(dt)
 	
-dfd=df.to_dict(orient='records')
+dfd=df.head().to_dict(orient='records')
 newRecords=[]
 updateRecords=[]
 grabber=[]
