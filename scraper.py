@@ -73,6 +73,7 @@ def dateSetter(ds):
 	if ds=='' or ds=='N/A': return ''
 	try:
 		dst=parser.parse(dd, dayfirst=True)
+		dst=datetime.date(dst.year,dst.month,dst.day)
 	except:
 		dst=''
 	return dst
@@ -96,8 +97,7 @@ def appealScrape(caseRef):
     
     #parse dates: "Statement(s) due","Questionnaire due","Event Date","Start Date","Appellant/LPA Final Comments due","Inquiry Evidence due","Decision Date","Interested Party Comments due"
     for el in ['Start Date','Interested Party Comments due']:
-    	tmp=dateSetter( d[el] )
-    	d["{}_t".format(el.replace(' ',''))]=datetime.date(tmp.year,tmp.month,tmp.day)
+    	d["{}_t".format(el.replace(' ',''))]=dateSetter( d[el] )
 
     d['linked']=rows[-1].find('td').text
     d['ref']=soup.find('h1',id='cphMainContent_LabelCaseReference').text.replace('Reference:','').strip()
