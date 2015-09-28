@@ -95,8 +95,8 @@ def appealScrape(caseRef):
       d[cells[0].text.strip()]=cells[1].text.strip()
       if len(cells)==4: d[cells[2].text.strip()]=cells[3].text.strip()
     
-    #parse dates: "Statement(s) due","Questionnaire due","Event Date","Start Date","Appellant/LPA Final Comments due","Inquiry Evidence due","Decision Date","Interested Party Comments due"
-    for el in ['Start Date','Interested Party Comments due']:
+    #parse dates: "Statement(s) due","Questionnaire due","Event Date","Appellant/LPA Final Comments due","Inquiry Evidence due"
+    for el in ['Start Date','Interested Party Comments due',"Decision Date"]:
     	d["{}_t".format(el.replace(' ',''))]=dateSetter( d[el] )
 
     d['linked']=rows[-1].find('td').text
