@@ -123,3 +123,5 @@ if len(caseDetails)>0:
 
     scraperwiki.sqlite.save(unique_keys=['ref'],table_name='casedetails', data=caseDetails[0])
     scraperwiki.sqlite.save(unique_keys=['k'],table_name='linkedcases', data=cc)
+else: print("All up to date...")
+
