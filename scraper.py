@@ -47,15 +47,21 @@ dfd=df.to_dict(orient='records')
 newRecords=[]
 updateRecords=[]
 grabber=[]
+cases=[x['CaseReference'] for x in scraperwiki.sqlite.select("CaseReference from {t}".format(t=t))]
+inprogress=[x['CaseReference'] for x in scraperwiki.sqlite.select("CaseReference from {t} where Status='In Progress'".format(t=t))]
 for r in dfd:
-	if len(scraperwiki.sqlite.select("* from {t} where CaseReference='{n}'".format(t=t,n=r['CaseReference'])))==0:
+	#if len(scraperwiki.sqlite.select("* from {t} where CaseReference='{n}'".format(t=t,n=r['CaseReference'])))==0:
+	if r['CaseReference'] not in cases:
 		print('First seen: {}'.format(r['CaseReference']))
 		r['firstSeen']=datetime.datetime.utcnow()
 		newRecords.append(r)
 		grabber.append(r['CaseReference'])
-	elif (r['Status']=='Complete: Decision issued') and (len(scraperwiki.sqlite.select("* from {t} where CaseReference='{n}' and Status='In Progress'".format(t=t,n=r['CaseReference'])))==1):
+	elif (r['Status']=='Complete: Decision issued') and r['CaseReference'] in inprogress:
 		updateRecords.append(r)
 		grabber.append(r['CaseReference'])
+#	elif (r['Status']=='Complete: Decision issued') and (len(scraperwiki.sqlite.select("* from {t} where CaseReference='{n}' and Status='In Progress'".format(t=t,n=r['CaseReference'])))==1):
+#		updateRecords.append(r)
+#		grabber.append(r['CaseReference'])
 if len(newRecords)>0:
 	print('Adding {} new records'.format(len(newRecords)))
 	scraperwiki.sqlite.save(unique_keys=['CaseReference'],table_name=t, data=newRecords)
@@ -89,11 +95,9 @@ def appealScrape(caseRef):
       if len(cells)==4: d[cells[2].text.strip()]=cells[3].text.strip()
     
     #parse dates: "Statement(s) due","Questionnaire due","Event Date","Start Date","Appellant/LPA Final Comments due","Inquiry Evidence due","Decision Date","Interested Party Comments due"
-    d['Start_Date_t']=d['Start Date'].apply(lambda x: dateSetter(x))
-    d['Start_Date_t']= d['Start_Date_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
-
-    d['Int_Party_Comments_due_t']=d['Interested Party Comments due'].apply(lambda x: dateSetter(x))
-    d['Int_Party_Comments_due_t']= d['Int_Party_Comments_due_t'].apply(lambda x: datetime.date(x.year,x.month,x.day))
+    for el in ['Start Date','Interested Party Comments due']:
+    	tmp=dateSetter( d[el] )
+    	d["{}_t".format(el.replace(' ',''))]=datetime.date(tmp.year,tmp.month,tmp.day))
 
     d['linked']=rows[-1].find('td').text
     d['ref']=soup.find('h1',id='cphMainContent_LabelCaseReference').text.replace('Reference:','').strip()
