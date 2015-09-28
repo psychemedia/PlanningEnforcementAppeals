@@ -63,6 +63,7 @@ if len(updateRecords)>0:
 	scraperwiki.sqlite.save(unique_keys=['CaseReference'],table_name=t, data=updateRecords)
 
 def appealScrape(caseRef):
+    print('Getting details for {}'.format(caseRef))
     urlstub="https://acp.planninginspectorate.gov.uk/ViewCase.aspx?CaseID={}&CoID=0"
     cid=caseRef.split('/')[-1]
     url=urlstub.format(cid)
@@ -101,7 +102,7 @@ def appealScrape(caseRef):
 
 
 #zz=df['CaseReference'].head(2).apply(lambda x: appealScrape(x))
-zz=df[df['CaseReference'].isin(grabber)].apply(lambda x: appealScrape(x))
+zz=df[df['CaseReference'].isin(grabber)]['Case Reference'].apply(lambda x: appealScrape(x))
 caseDetails=[list(z) for z in zip(*zz)]
 
 cc=[]
