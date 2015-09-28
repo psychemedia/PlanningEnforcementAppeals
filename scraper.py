@@ -49,7 +49,7 @@ updateRecords=[]
 grabber=[]
 for r in dfd:
 	if len(scraperwiki.sqlite.select("* from {t} where CaseReference='{n}'".format(t=t,n=r['CaseReference'])))==0:
-		print('First seen',r)
+		print('First seen: {}'.format(r['CaseReference']))
 		r['firstSeen']=datetime.datetime.utcnow()
 		newRecords.append(r)
 		grabber.append(r['CaseReference'])
