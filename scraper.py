@@ -116,9 +116,10 @@ zz=df[df['CaseReference'].isin(grabber)]['CaseReference'].apply(lambda x: appeal
 caseDetails=[list(z) for z in zip(*zz)]
 
 cc=[]
-for c in caseDetails[1]:
-    for ci in c:
-        cc.append(ci)
+if len(caseDetails)>0:
+    for c in caseDetails[1]:
+        for ci in c:
+            cc.append(ci)
 
-scraperwiki.sqlite.save(unique_keys=['ref'],table_name='casedetails', data=caseDetails[0])
-scraperwiki.sqlite.save(unique_keys=['k'],table_name='linkedcases', data=cc)
+    scraperwiki.sqlite.save(unique_keys=['ref'],table_name='casedetails', data=caseDetails[0])
+    scraperwiki.sqlite.save(unique_keys=['k'],table_name='linkedcases', data=cc)
