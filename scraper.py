@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import json
 import datetime
+import time
 
 br = mechanize.Browser()
 url='https://acp.planninginspectorate.gov.uk/CaseSearch.aspx'
@@ -41,7 +42,7 @@ t='IWPLANNINGAPPLICATIONAPPEALS'
 dt="CREATE TABLE IF NOT EXISTS 'IWPLANNINGAPPLICATIONAPPEALS' ('CaseReference' text,'SiteAddress' text,'AppellantApplicant' text,'Authority' text,'Case Type' text,'Status' text)"
 scraperwiki.sqlite.execute(dt)
 	
-dfd=df.head().to_dict(orient='records')
+dfd=df.to_dict(orient='records')
 newRecords=[]
 updateRecords=[]
 grabber=[]
@@ -95,11 +96,12 @@ def appealScrape(caseRef):
             ll['type']='Linked'
             ll["linkref"]=lnk.split('-')[1].strip()
             l.append(ll)
+    time.sleep(1)
     return d,l
 
 
-zz=df['CaseReference'].head(2).apply(lambda x: appealScrape(x))
-#zz=df[df['Case Reference'].isin(grabber)].apply(lambda x: appealScrape(x))
+#zz=df['CaseReference'].head(2).apply(lambda x: appealScrape(x))
+zz=df[df['CaseReference'].isin(grabber)].apply(lambda x: appealScrape(x))
 caseDetails=[list(z) for z in zip(*zz)]
 
 cc=[]
