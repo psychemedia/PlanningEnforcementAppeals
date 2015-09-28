@@ -34,7 +34,7 @@ doc=doc.replace('\r','').replace('\n','')
 doc=doc.replace('<br/>',', ')
 
 df=pd.read_html(doc,header=0)[0]
-df.rename(columns={'Appellant/Applicant	':'AppellantApplicant','Case Reference':'CaseReference','Site Address':'SiteAddress','Case Type':'CaseType'}, inplace=True)
+df.rename(columns={'Appellant/Applicant':'AppellantApplicant','Case Reference':'CaseReference','Site Address':'SiteAddress','Case Type':'CaseType'}, inplace=True)
 
 t='IWPLANNINGAPPLICATIONAPPEALS'
 
@@ -98,7 +98,7 @@ def appealScrape(caseRef):
     return d,l
 
 
-zz=df['Case Reference'].head(2).apply(lambda x: appealScrape(x))
+zz=df['CaseReference'].head(2).apply(lambda x: appealScrape(x))
 #zz=df[df['Case Reference'].isin(grabber)].apply(lambda x: appealScrape(x))
 caseDetails=[list(z) for z in zip(*zz)]
 
