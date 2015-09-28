@@ -102,7 +102,7 @@ def appealScrape(caseRef):
 
 
 #zz=df['CaseReference'].head(2).apply(lambda x: appealScrape(x))
-zz=df[df['CaseReference'].isin(grabber)]['Case Reference'].apply(lambda x: appealScrape(x))
+zz=df[df['CaseReference'].isin(grabber)]['CaseReference'].apply(lambda x: appealScrape(x))
 caseDetails=[list(z) for z in zip(*zz)]
 
 cc=[]
