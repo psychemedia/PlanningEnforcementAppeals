@@ -12,6 +12,8 @@
 # called "data".
 import os
 os.system("pip install scraperwiki")
+os.system("pip install mechanize")
+os.system("pip install pandas")
 
 import scraperwiki
 import requests
