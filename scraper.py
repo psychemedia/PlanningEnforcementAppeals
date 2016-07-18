@@ -10,6 +10,8 @@
 # All that matters is that your final data is written to an SQLite database
 # called "data.sqlite" in the current working directory which has at least a table
 # called "data".
+import sys
+os.system("pip install scraperwiki")
 
 import scraperwiki
 import requests
