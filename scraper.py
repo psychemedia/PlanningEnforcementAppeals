@@ -132,6 +132,7 @@ def appealScrape(caseRef):
                 ll['type']='Linked'
                 ll["linkref"]=lnk.split('-')[1].strip()
                 l.append(ll)
+    #play nice
     time.sleep(1)
     return d,l
 
