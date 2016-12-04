@@ -1,29 +1,21 @@
 
-# # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
+import scraperwiki
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import json
+import datetime
+from dateutil import parser
 
-# You don't have to do things with the ScraperWiki and lxml libraries.
-# You can use whatever libraries you want: https://morph.io/documentation/python
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
 #import os
 #os.system("pip install scraperwiki")
 #os.system("pip install mechanize")
 #os.system("pip install pandas")
 
-import scraperwiki
-import requests
 import mechanize
-from bs4 import BeautifulSoup
-import pandas as pd
-import json
-import datetime
+
 import time
-from dateutil import parser
+
 
 br = mechanize.Browser()
 url='https://acp.planninginspectorate.gov.uk/CaseSearch.aspx'
